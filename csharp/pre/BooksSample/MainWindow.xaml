@@ -1,0 +1,77 @@
+﻿<Window x:Class="BooksSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:services="clr-namespace:BooksSample.Services"
+        xmlns:conv="clr-namespace:BooksSample.Converters"
+        xmlns:model="clr-namespace:BooksSample.Models"
+        xmlns:utils="clr-namespace:BooksSample.Utilities"
+        xmlns:local="clr-namespace:BooksSample"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <conv:StringArrayToStringConverter x:Key="StringArrayToStringConverter" />
+        <DataTemplate DataType="{x:Type model:Book}" x:Key="WroxTemplate">
+            <Border Background="Red" BorderThickness="4">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="BookWidth" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Text="{Binding Title, Mode=OneWay}" />
+                    <TextBlock Grid.Row="1" Text="{Binding Publisher, Mode=OneWay}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type model:Book}" x:Key="DefaultBookTemplate">
+            <Border Background="LightBlue" BorderThickness="4">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="BookWidth" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Row="0" Text="{Binding Title, Mode=OneWay}" />
+                    <TextBlock Grid.Row="1" Text="{Binding Publisher, Mode=OneWay}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <utils:BookTemplateSelector 
+            WroxTemplate="{StaticResource WroxTemplate}" 
+            DefaultBookTemplate="{StaticResource DefaultBookTemplate}" 
+            x:Key="BookTemplateSelector" />
+        <ObjectDataProvider x:Key="mydata" ObjectType="{x:Type services:BooksFactory}" MethodName="GetTheBook" />
+    </Window.Resources>
+    <Grid>
+        <Grid.LayoutTransform>
+            <ScaleTransform ScaleX="2" ScaleY="2" />
+        </Grid.LayoutTransform>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <ListBox ItemsSource="{Binding Mode=OneWay}"
+                 Grid.IsSharedSizeScope="True"
+                 IsSynchronizedWithCurrentItem="True" 
+                 ItemTemplateSelector="{StaticResource BookTemplateSelector}">
+         
+        </ListBox>
+        <StackPanel Grid.Column="1">
+
+            <Label Content="{Binding /, Mode=OneWay}" Margin="8" />
+            <TextBlock Text="Title" Margin="2,0" />
+            <TextBox Text="{Binding /Title, Mode=TwoWay}" Margin="8" />
+            <TextBlock Text="Publisher" Margin="2,0" />
+            <TextBox Text="{Binding /Publisher, Mode=TwoWay}" Margin="8" />
+            <TextBlock Text="Authors" Margin="2,0" />
+            <TextBlock Text="{Binding /Authors, Mode=OneWay, Converter={StaticResource StringArrayToStringConverter}, ConverterParameter='; '}" Margin="8" />
+
+        </StackPanel>
+    </Grid>
+</Window>
