@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AsyncStreamsSample
@@ -8,21 +7,11 @@ namespace AsyncStreamsSample
     {
         static async Task Main()
         {
-            //var aDevice = new ADevice();
-            //await foreach (var x in aDevice.GetSensorData1())
-            //{
-            //    Console.WriteLine($"{x.Value1} {x.Value2}");
-            //}
-
-            var cts = new CancellationTokenSource();
-            cts.CancelAfter(5000);
-            cts.Token.Register(() => Console.WriteLine("cancellation requested"));
             var aDevice = new ADevice();
-            await foreach (var x in aDevice.GetSensorData(cts.Token))
+            await foreach (var x in aDevice.GetSensorData())
             {
                 Console.WriteLine($"{x.Value1} {x.Value2}");
             }
-            Console.WriteLine("finished");
         }
     }
 }

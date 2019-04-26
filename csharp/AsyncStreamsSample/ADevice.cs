@@ -7,26 +7,7 @@ namespace AsyncStreamsSample
 {
     public class ADevice
     {
-        public async IAsyncEnumerable<SensorData> GetSensorData(CancellationToken token = default)
-        {
-            bool cancel = false;
-            using (token.Register(() => cancel = true))
-            {
-                var r = new Random();
-                while (!cancel)
-                {
-                    await Task.Delay(r.Next(500));
-                    yield return new SensorData()
-                    {
-                        Value1 = r.Next(100),
-                        Value2 = r.Next(100)
-                    };
-                }
-                Console.WriteLine("cancel requested");
-            };
-        }
-
-        public async IAsyncEnumerable<SensorData> GetSensorData1()
+        public async IAsyncEnumerable<SensorData> GetSensorData()
         {
             var r = new Random();
             while (true)
